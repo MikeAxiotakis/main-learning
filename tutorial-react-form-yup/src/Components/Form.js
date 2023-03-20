@@ -1,73 +1,54 @@
-import React from "react";
-import "../App.css";
+import { Container, Box, Avatar, Typography, TextField, InputAdornment, Button } from "@mui/material";
+import TextFields from "./TextFields";
+import SelectFields from "./SelectFields";
+import CheckboxField from "./CheckboxField";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
-const schema = yup.object().shape({
-  firstName: yup.string().required("First Name should be required please"),
-  lastName: yup.string().required(),
-  email: yup.string().email().required(),
-  age: yup.number().positive().integer().required(),
-  password: yup.string().min(4).max(15).required(),
-  confirmPassword: yup.string().oneOf([yup.ref("password"), null]),
-});
+export default function Form () {
 
-function Form() {
-  const { register, handleSubmit, errors } = useForm({
-    resolver: yupResolver(schema),
-  });
 
-  const submitForm = (data) => {
-    console.log(data);
-  };
+  const {handleSubmit, control} = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data)
+  }
+
   return (
-    <div className="Form">
-      <div className="title">Sign Up</div>
-      <div className="inputs">
-        <form onSubmit={handleSubmit(submitForm)}>
-          <input
-            type="text"
-            name="firstName"
-            ref={register}
-            placeholder="First Name..."
-          />
-          <p> {errors.firstName?.message} </p>
-          <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name..."
-            ref={register}
-          />
-          <p> {errors.lastName?.message} </p>
-          <input
-            type="text"
-            name="email"
-            placeholder="Email..."
-            ref={register}
-          />
-          <p> {errors.email?.message} </p>
-          <input type="text" name="age" placeholder="Age..." ref={register} />
-          <p> {errors.age?.message} </p>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password..."
-            ref={register}
-          />
-          <p> {errors.password?.message} </p>
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirm Password..."
-            ref={register}
-          />
-          <p> {errors.confirmPassword && "Passwords Should Match!"} </p>
-          <input type="submit" id="submit" />
-        </form>
-      </div>
-    </div>
-  );
-}
+    <>
+    <Container 
+    
+    >
+      <Box sx={{display: 'flex', flexDirection: 'column', mt: '4rem', alignItems: 'center' }}>
 
-export default Form;
+   
+      <Avatar sx={{ m: 1, bgcolor: 'secondary.main', }} >
+
+      </Avatar>
+      <Typography component="h1">Sign Up</Typography>
+      <Box noValidate component='form' onSubmit={handleSubmit(onSubmit)} sx={{ mt: '2rem'}} >
+        <TextFields control={control} name='fullname' label="Full Name"/>
+        <TextFields control={control} name='email' label="Email"/>
+        <TextFields control={control} name='mobile' label="Mobile Phone" InputProps={{
+          startAdornment: <InputAdornment position="start">+781</InputAdornment>,
+          type: 'number'
+        }} />
+        <SelectFields control={control} name='country' label="Country"/>
+        <TextFields control={control} name='password' label="Password"/>
+        <TextFields control={control} name='confirmPassword' label="Comfirm Password"/>
+        <CheckboxField />
+        <Button type="submit"
+fullWidth
+variant="contained"
+sx={{mt: 3, mb: 2}}
+> Submit
+        </Button>
+
+        
+
+      </Box>
+      </Box>
+
+    </Container>
+    </>
+  )
+}
